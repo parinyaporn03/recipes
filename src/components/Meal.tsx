@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { FoodResponse } from "../utils/types/Type";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
@@ -13,6 +13,7 @@ const Meal = () => {
   const navigate = useNavigate();
   const { category } = useParams();
   const [data, setData] = useState<FoodResponse | undefined>(undefined);
+
   const handleMealClick = (idMeal: string) => {
     navigate(`/detail/${idMeal}`);
   };
@@ -44,11 +45,12 @@ const Meal = () => {
       setLoading(false);
     }
   };
-  useEffect(() => {
+
+  useLayoutEffect(() => {
     if (category) {
       filterDataByCategory(category);
     } else {
-      navigate("/");
+      navigate("/Recommend");
     }
   }, [category, navigate]);
 
@@ -86,7 +88,7 @@ const Meal = () => {
                 delay: 0.3 + index * 0.07,
               }}
               key={uuidv4()}
-              className={`relative border-2 border-black rounded-lg px-4 py-6 shadow hover:shadow-lg 
+              className={`cursor-pointer relative border-2 border-black rounded-lg px-4 py-6 shadow hover:shadow-lg 
                 ${index % 2 === 0 ? "bg-[#FFFAD9]" : "bg-[#eaf6e7]"}
               `}
               onClick={() => handleMealClick(meal.idMeal)}

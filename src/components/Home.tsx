@@ -1,14 +1,13 @@
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import "../App.css";
 import axios from "axios";
 import { CategoriesMeal } from "../utils/types/Type";
 import { url } from "../utils/constants/Constant";
 import Categories from "../components/Categories";
 import Pan from "../assets/logo/pan.png";
-// import Meal from "../components/Meal";
 import { Outlet } from "react-router-dom";
+
 const Home = () => {
-  // const [data, setData] = useState<FoodResponse | undefined>(undefined);
   const [categories, setCategories] = useState<CategoriesMeal | undefined>(
     undefined
   );
@@ -27,9 +26,10 @@ const Home = () => {
     }
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     getCategory();
   }, []);
+
   return (
     <>
       <div className=" bg-[#A5B68D] w-full border-b-2 border-gray-400 ">

@@ -39,7 +39,7 @@ const Categories = ({ categories }: CategoriesProp) => {
   return (
     <div className="flex justify-center  font-Mono ">
       <div className="grid grid-cols-8 md:flex md:justify-center gap-2 p-2 bg-[#DA8359] rounded-2xl flex-wrap border-2 border-black">
-        <Tooltip placement="bottom" title={"recommend menu"}>
+        <Tooltip placement="bottom" title={"recommend"}>
           <NavLink
             to={`/Recommend`}
             className={({ isActive }) =>
@@ -84,7 +84,6 @@ const Categories = ({ categories }: CategoriesProp) => {
         ))}
       </div>
     </div>
-    // </div>
   );
 };
 
