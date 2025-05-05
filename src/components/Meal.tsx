@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FoodResponse } from "../utils/types/Type";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
@@ -46,7 +46,7 @@ const Meal = () => {
     }
   };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (category) {
       filterDataByCategory(category);
     } else {
