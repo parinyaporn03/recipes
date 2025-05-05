@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { memo, useCallback, useContext, useEffect, useState } from "react";
 import { FoodResponse } from "../utils/types/Type";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
@@ -8,34 +8,33 @@ import LoaderAnimation from "../lotties/loader.json";
 import { motion } from "framer-motion";
 import Hat from "../assets/logo/hat.png";
 import { v4 as uuidv4 } from "uuid";
-const Meal = () => {
+import { CategoriesContext } from "../App";
+
+const Meal = memo(() => {
+  const categories = useContext(CategoriesContext);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { category } = useParams();
   const [data, setData] = useState<FoodResponse | undefined>(undefined);
 
   const handleMealClick = (idMeal: string) => {
-    navigate(`/detail/${idMeal}`);
+    navigate(`/recipes/${category}/detail/${idMeal}`);
   };
 
-  const filterDataByCategory = async (category: string) => {
+  const filterDataByCategory = useCallback(async (category: string) => {
     setLoading(true);
     try {
       if (category !== "Recommend") {
         const response = await axios.get(
           `https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`
         );
-
-        if (response.data.meals === null) {
-          setData({ meals: [] });
-        } else {
-          setData(response.data);
-        }
+        setData(response.data);
       } else {
-        const mealRequests = Array.from({ length: 8 }, () =>
-          axios.get("https://www.themealdb.com/api/json/v1/1/random.php")
+        const responses = await Promise.all(
+          Array.from({ length: 8 }, () =>
+            axios.get("https://www.themealdb.com/api/json/v1/1/random.php")
+          )
         );
-        const responses = await Promise.all(mealRequests);
         const meals = responses.map((response) => response.data.meals).flat();
         setData({ meals });
       }
@@ -44,15 +43,32 @@ const Meal = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (category) {
       filterDataByCategory(category);
     } else {
-      navigate("/Recommend");
+      navigate("/recipes/Recommend");
     }
-  }, [category, navigate]);
+  }, [category, filterDataByCategory, navigate]);
+
+  if (!categories) {
+    return (
+      <div className="flex h-72 justify-center ">
+        <Lottie animationData={LoaderAnimation} loop={true} />
+      </div>
+    );
+  }
+
+  if (
+    ![
+      ...categories.meals.map((meal) => meal.strCategory),
+      "Recommend",
+    ].includes(category ?? "")
+  ) {
+    return <div className="flex justify-center items-center">Not Found</div>;
+  }
 
   return (
     <div className="p-8 font-Mono  ">
@@ -89,8 +105,8 @@ const Meal = () => {
               }}
               key={uuidv4()}
               className={`cursor-pointer relative border-2 border-black rounded-lg px-4 py-6 shadow hover:shadow-lg 
-                ${index % 2 === 0 ? "bg-[#FFFAD9]" : "bg-[#eaf6e7]"}
-              `}
+                  ${index % 2 === 0 ? "bg-[#FFFAD9]" : "bg-[#eaf6e7]"}
+                `}
               onClick={() => handleMealClick(meal.idMeal)}
             >
               <img
@@ -111,6 +127,6 @@ const Meal = () => {
       )}
     </div>
   );
-};
+});
 
 export default Meal;

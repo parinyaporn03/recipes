@@ -56,7 +56,7 @@ const Detail = () => {
     if (id) {
       getMealById(id);
     } else {
-      navigate("/");
+      navigate("/recipes/Recommend");
     }
   }, [id, navigate]);
   useEffect(() => {

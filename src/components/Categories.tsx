@@ -41,7 +41,7 @@ const Categories = ({ categories }: CategoriesProp) => {
       <div className="grid grid-cols-8 md:flex md:justify-center gap-2 p-2 bg-[#DA8359] rounded-2xl flex-wrap border-2 border-black">
         <Tooltip placement="bottom" title={"recommend"}>
           <NavLink
-            to={`/Recommend`}
+            to={`/recipes/Recommend`}
             className={({ isActive }) =>
               `flex flex-col items-center ${
                 isActive
@@ -65,7 +65,7 @@ const Categories = ({ categories }: CategoriesProp) => {
             key={uuidv4()}
           >
             <NavLink
-              to={`/${category.strCategory}`}
+              to={`/recipes/${category.strCategory}`}
               className={({ isActive }) =>
                 `flex flex-col items-center ${
                   isActive

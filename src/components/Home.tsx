@@ -1,34 +1,12 @@
-import { useEffect, useState } from "react";
 import "../App.css";
-import axios from "axios";
-import { CategoriesMeal } from "../utils/types/Type";
-import { url } from "../utils/constants/Constant";
 import Categories from "../components/Categories";
 import Pan from "../assets/logo/pan.png";
 import { Outlet } from "react-router-dom";
+import { useContext } from "react";
+import { CategoriesContext } from "../App";
 
 const Home = () => {
-  const [categories, setCategories] = useState<CategoriesMeal | undefined>(
-    undefined
-  );
-
-  const getCategory = async () => {
-    try {
-      const response = await axios.get(`${url}list.php?c=list`);
-      if (response.data.meals === null) {
-        console.log("No meals found for this category.");
-        setCategories({ meals: [] });
-      } else {
-        setCategories(response.data);
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
-  useEffect(() => {
-    getCategory();
-  }, []);
+  const categories = useContext(CategoriesContext);
 
   return (
     <>
